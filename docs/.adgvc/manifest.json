@@ -1,0 +1,17 @@
+[
+  {
+    "docPath": "docs/controllers/authController.md",
+    "sources": [
+      {
+        "repoFullName": "beverlymugwadi/agriconnect-backend",
+        "path": "controllers/authController.js",
+        "branch": "master",
+        "commitSha": "f753a4e0f1d490e3560c3642e314f4c46803242e"
+      }
+    ],
+    "generatedAt": "2026-06-25T19:26:04.941Z",
+    "generator": "ADGVC",
+    "authorLogin": "beverlymugwadi",
+    "version": 2
+  }
+]
