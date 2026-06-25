@@ -65,6 +65,46 @@ exports.createBooking = async (req, res, next) => {
       console.error('Farmer user not found for notification');
     }
 
+ // Create notification for the farmer
+    const farmerNotification = await Notification.create({
+      recipient: farmerUser._id,
+      recipientType: 'farmer',
+      title: 'New Order Received',
+      message: `${vendor.user.name || 'A vendor'} has ordered ${quantity} ${foundProduct.unit} of ${foundProduct.name}.`,
+      type: 'order',
+      relatedId: booking._id,
+      read: false,
+      timestamp: new Date()
+    });
+    
+    console.log('Created farmer notification:', {
+      notificationId: farmerNotification._id,
+      recipient: farmerUser._id,
+      recipientType: 'farmer'
+    });
+    
+    // Emit notification to the farmer
+    const io = getIO();
+    if (io) {
+      // Send to both room formats to ensure delivery
+      io.to(`farmer_${farmerUser._id}`).emit('newNotification', farmerNotification);
+      io.to(`user_${farmerUser._id}`).emit('newNotification', farmerNotification);
+      
+      console.log(`Notification sent to farmer: ${farmerUser._id}`, {
+        rooms: [`farmer_${farmerUser._id}`, `user_${farmerUser._id}`],
+        notification: farmerNotification
+      });
+    } else {
+      console.error('Socket.io instance not available for sending notification');
+    }
+
+    res.status(201).json({ success: true, data: booking });
+  } catch (error) {
+    console.error('Error creating booking:', error);
+    next(error);
+  }
+};
+    
 // @desc    Get all bookings
 // @route   GET /api/bookings
 // @access  Private (farmers & vendors)
