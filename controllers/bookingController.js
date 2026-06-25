@@ -440,6 +440,62 @@ exports.updateBookingStatus = async (req, res, next) => {
   }
 };
 
+// @desc    Get booking statistics
+// @route   GET /api/bookings/stats
+// @access  Private
+exports.getBookingStats = async (req, res, next) => {
+  try {
+    const totalBookings = await Booking.countDocuments();
+
+    const processingBookings = await Booking.countDocuments({
+      status: 'processing'
+    });
+
+    const confirmedBookings = await Booking.countDocuments({
+      status: 'confirmed'
+    });
+
+    const deliveredBookings = await Booking.countDocuments({
+      status: 'delivered'
+    });
+
+    const cancelledBookings = await Booking.countDocuments({
+      status: 'cancelled'
+    });
+
+    const revenueResult = await Booking.aggregate([
+      {
+        $match: { status: 'delivered' }
+      },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: '$totalPrice' }
+        }
+      }
+    ]);
+
+    const totalRevenue =
+      revenueResult.length > 0
+        ? revenueResult[0].totalRevenue
+        : 0;
+
+    res.status(200).json({
+      success: true,
+      data: {
+        totalBookings,
+        processingBookings,
+        confirmedBookings,
+        deliveredBookings,
+        cancelledBookings,
+        totalRevenue
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // @desc    Delete a booking
 // @route   DELETE /api/bookings/:id
 // @access  Private (vendors only)
