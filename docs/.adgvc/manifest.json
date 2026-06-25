@@ -13,5 +13,20 @@
     "generator": "ADGVC",
     "authorLogin": "beverlymugwadi",
     "version": 2
+  },
+  {
+    "docPath": "docs/controllers/bookingController.md",
+    "sources": [
+      {
+        "repoFullName": "beverlymugwadi/agriconnect-backend",
+        "path": "controllers/bookingController.js",
+        "branch": "master",
+        "commitSha": "47678c50b490930900e2d1ab4a12cc77d425255e"
+      }
+    ],
+    "generatedAt": "2026-06-25T20:01:36.239Z",
+    "generator": "ADGVC",
+    "authorLogin": "beverlymugwadi",
+    "version": 2
   }
 ]
