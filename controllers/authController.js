@@ -10,6 +10,7 @@ exports.register = async (req, res, next) => {
   try {
     const { name, email, password, phone, userType } = req.body;
 
+    //Restering a user with name, email, password, phone and userType
     // Create user
     const user = await User.create({
       name,
